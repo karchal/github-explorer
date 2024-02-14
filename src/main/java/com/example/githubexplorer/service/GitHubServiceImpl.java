@@ -22,8 +22,8 @@ public class GitHubServiceImpl implements GitHubService {
 
     @Override
     public List<RepositoryInfo> getRepositories(String username) {
-        String endpoint = username + "/repos";
-        List<RepositoryInfo> repos = client.getList(endpoint);
+
+        List<RepositoryInfo> repos = client.getRepoList(username);
 
         if(repos.size() == 0) { return repos; }
 
@@ -31,6 +31,8 @@ public class GitHubServiceImpl implements GitHubService {
                 .stream()
                 .filter(r -> !r.isFork())
                 .collect(Collectors.toList());
+
         return notForkRepos;
     }
+
 }
