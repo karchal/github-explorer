@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -22,6 +23,14 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public List<RepositoryInfo> getRepositories(String username) {
         String endpoint = username + "/repos";
-        return client.getList(endpoint);
+        List<RepositoryInfo> repos = client.getList(endpoint);
+
+        if(repos.size() == 0) { return repos; }
+
+        List<RepositoryInfo> notForkRepos = repos
+                .stream()
+                .filter(r -> !r.isFork())
+                .collect(Collectors.toList());
+        return notForkRepos;
     }
 }

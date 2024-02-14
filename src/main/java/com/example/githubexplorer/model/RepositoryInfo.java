@@ -6,4 +6,5 @@ import lombok.Data;
 public class RepositoryInfo {
     private final String name;
     private final Owner owner;
+    private final boolean fork;
 }
