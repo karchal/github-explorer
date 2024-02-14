@@ -31,8 +31,9 @@ public class GitHubClient {
         this.gson = gson;
     }
 
-    public <T> List<T> getList(String endpoint) {
-        try (CloseableHttpResponse response = httpClient.execute(new HttpGet(baseUrl + endpoint))) {
+    public List<RepositoryInfo> getRepoList(String username) {
+
+        try (CloseableHttpResponse response = httpClient.execute(new HttpGet(baseUrl + username + "/repos"))) {
 
             int statusCode = response.getStatusLine().getStatusCode();
 
@@ -40,10 +41,11 @@ public class GitHubClient {
                 //throw new UserNotFoundException("Failed to fetch data from GitHub API. Status code: " + statusCode);
                 return new ArrayList<>(); //todo: remove this when an exception is thrown
             }
+
             String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
             log.info(responseString);
-
             return gson.fromJson(responseString, new TypeToken<List<RepositoryInfo>>(){}.getType());
+
         } catch (IOException e) {
             //throw new GitHubApiException("Failed to fetch data from GitHub API", e);
             log.error("Failed to fetch data from GitHub API");
